@@ -1,0 +1,52 @@
+from scapy.all import sniff, IP, TCP, send
+from plyer import notification
+import time
+
+# Set the time limit for the scan in seconds
+scan_time_limit = 3  # Adjust this value as needed
+
+# Define a dictionary to store detected intruders
+intruders = {}
+
+def packet_callback(packet):
+    if IP in packet and TCP in packet:
+        src_ip = packet[IP].src
+        dst_ip = packet[IP].dst
+        src_port = packet[TCP].sport
+        dst_port = packet[TCP].dport
+
+        intrusion_message = f"[*] Detected potential intrusion: {src_ip}:{src_port} -> {dst_ip}:{dst_port}"
+
+        if src_ip not in intruders:
+            intruders[src_ip] = 1
+            print(intrusion_message)
+            send_notification("Intrusion Detected", intrusion_message)
+        else:
+            intruders[src_ip] += 1
+            if intruders[src_ip] >= 3:  # Block IP after 3 attempts (adjust as needed)
+                block_ip(src_ip)
+                print(f"[*] Blocked {src_ip} due to repeated intrusion attempts.")
+
+def send_notification(title, message):
+    notification.notify(
+        title=title,
+        message=message,
+        app_icon=None,  # e.g., 'C:\\icon_32x32.ico'
+        timeout=10,  # seconds
+    )
+
+def block_ip(ip):
+    # For demonstration purposes, send a RST packet to block communication with the intruder
+    rst_packet = IP(dst=ip)/TCP(dport=0, flags='R')
+    send(rst_packet, verbose=0)
+
+if __name__ == "__main__":
+    print(f"[*] Starting intrusion detection with a time limit of {scan_time_limit} seconds...")
+
+    start_time = time.time()
+
+    # Adjust the 'iface' parameter to the network interface you want to monitor (e.g., "Ethernet" or "Wi-Fi")
+    sniff(prn=packet_callback, store=0, iface="Wi-Fi", timeout=scan_time_limit)
+
+    elapsed_time = time.time() - start_time
+    print(f"[*] Scan completed in {elapsed_time:.2f} seconds.")
