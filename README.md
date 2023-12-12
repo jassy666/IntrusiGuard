@@ -8,7 +8,7 @@ Key Features
   
 - Intrusion Prevention Mechanisms: Basic preventive actions, such as blocking IP addresses associated with suspicious activity.
 
-- Immediate Alerts:Integrated push notifications using Plyer for immediate awareness of security events.
+- Immediate Alerts: Integrated push notifications using Plyer for immediate awareness of security events.
 
 
 How to Use
