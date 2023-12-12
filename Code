@@ -1,9 +1,6 @@
 from scapy.all import sniff, IP, TCP, send
 from plyer import notification
-import time
 
-# Set the time limit for the scan in seconds
-scan_time_limit = 3  # Adjust this value as needed
 
 # Define a dictionary to store detected intruders
 intruders = {}
@@ -41,12 +38,10 @@ def block_ip(ip):
     send(rst_packet, verbose=0)
 
 if __name__ == "__main__":
-    print(f"[*] Starting intrusion detection with a time limit of {scan_time_limit} seconds...")
+    print(f"[*] Starting intrusion detection...")
 
-    start_time = time.time()
 
     # Adjust the 'iface' parameter to the network interface you want to monitor (e.g., "Ethernet" or "Wi-Fi")
-    sniff(prn=packet_callback, store=0, iface="Wi-Fi", timeout=scan_time_limit)
+    sniff(prn=packet_callback, store=0, iface="Wi-Fi")
 
-    elapsed_time = time.time() - start_time
-    print(f"[*] Scan completed in {elapsed_time:.2f} seconds.")
+    print(f"[*] Scan completed.")
