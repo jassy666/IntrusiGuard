@@ -16,5 +16,5 @@ Installation
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/jasssy666/IntrusiGuard.git
+   git clone https://github.com/jassy666/IntrusiGuard.git
 
