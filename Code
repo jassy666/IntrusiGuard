@@ -33,7 +33,6 @@ def send_notification(title, message):
     )
 
 def block_ip(ip):
-    # For demonstration purposes, send a RST packet to block communication with the intruder
     rst_packet = IP(dst=ip)/TCP(dport=0, flags='R')
     send(rst_packet, verbose=0)
 
